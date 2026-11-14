@@ -33,13 +33,13 @@ int main(void)
             ClearBackground(DARKGRAY);
             DrawCircleV(centerPoint, raio, BLACK);
 
-            for(int i = 0; i < 360; i = i + 10){
-                float angulo = i - proa;
+            for(int grau = 0; grau < 360; grau = grau + 10){
+                float angulo = grau - proa;
                 float rad = angulo * DEG2RAD;
                 Vector2 dir = {sinf(rad), -cosf(rad)};
 
                 int tam;
-                if(i % 30 == 0){
+                if(grau % 30 == 0){
                     tam = 25;
                 } else{
                     tam = 12;
@@ -50,8 +50,35 @@ int main(void)
                    centerPoint.y + dir.y * raio };
 
                 DrawLineV(inicio, fim, WHITE);
-DrawLineV(inicio, fim, RED);
+
+                if(grau % 30 == 0){
+                    const char * rotulo;
+                    if(grau == 0){
+                        rotulo = "N";
+                    } else if(grau == 90){
+                        rotulo = "E";
+                    } else if( grau == 180){
+                        rotulo = "S";
+                    } else if(grau == 270){
+                        rotulo = "L";
+                    } else{
+                        rotulo = TextFormat("%d", grau / 10);
+                    };
+                    int x = centerPoint.x + (raio - 50) * dir.x;
+                    int y = centerPoint.y + (raio - 50) * dir.y;
+
+                    DrawText(rotulo, x, y, 20, WHITE);
+                };
             };
+                // Referencia fixa
+            Vector2 p1 = { centerPoint.x - 10, centerPoint.y - raio - 15 };   // canto esquerdo da base
+            Vector2 p2 = { centerPoint.x,      centerPoint.y - raio + 10 };   // ponta, apontando para o centro
+            Vector2 p3 = { centerPoint.x + 10, centerPoint.y - raio - 15 };   // canto direito da base
+
+            DrawTriangle(p1, p2, p3, WHITE);
+            
+            int proaExib = (int)roundf(proa) % 360;
+            DrawText(TextFormat("%d°",proaExib), (centerPoint.x - 20), 20, 20,WHITE);
 
         EndDrawing();
     }
