@@ -6,7 +6,7 @@
 int main(void)
 {
     Vector2 centerPoint;
-    centerPoint = (Vector2){300.0f,300.0f};
+    centerPoint = (Vector2){300.0f,310.0f};
     const int raio = 250;
     const float velocidade = 60.0f;
     float proa = 0.0f;
@@ -64,10 +64,13 @@ int main(void)
                     } else{
                         rotulo = TextFormat("%d", grau / 10);
                     };
-                    int x = centerPoint.x + (raio - 50) * dir.x;
-                    int y = centerPoint.y + (raio - 50) * dir.y;
+                    int fonte = 20;
+                    int larg = MeasureText(rotulo, fonte);
 
-                    DrawText(rotulo, x, y, 20, WHITE);
+                    int x = (int)(centerPoint.x + (raio - 50) * dir.x);
+                    int y = (int)(centerPoint.y + (raio - 50) * dir.y);
+
+                    DrawText(rotulo, x - larg / 2, y - fonte / 2, fonte, WHITE);
                 };
             };
                 // Referencia fixa
@@ -78,7 +81,9 @@ int main(void)
             DrawTriangle(p1, p2, p3, WHITE);
             
             int proaExib = (int)roundf(proa) % 360;
-            DrawText(TextFormat("%d°",proaExib), (centerPoint.x - 20), 20, 20,WHITE);
+            const char *textoExib = TextFormat("%d°",proaExib);
+            int largura = MeasureText(textoExib,30);
+            DrawText(textoExib, (int)(centerPoint.x - largura), 30, 30,WHITE);
 
         EndDrawing();
     }
