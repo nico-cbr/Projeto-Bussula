@@ -1,23 +1,58 @@
 #include "include/raylib.h"
 #include <math.h>
 
+//simulaçao mundo
+float atualizarProaReal(float proaV, float dt, float v){
+if(IsKeyPressed == KEY_A){
+    proaV = proaV + v * dt;
+}else if (IsKeyPressed == KEY_D){
+    proaV = proaV - v * dt;
+}
+return normalizar360(proaV);
+};
 
+// simulacao leitura magnetica
+Vector2 lerMagnetico;
+lerMagnetico(float rumoV, float campo, float ruido){
+    float rad = rumoV * DEG2RAD;
+    float mx = campo * cosf(rad) + ruido * GetRandomValue(-1, 1);
+    float my = campo * senf(rad) + ruido * GetRandomValue(-1, 1);
+
+    return(mx,my);
+};
+
+// instrumento
+float calcularProa(Vector2 leitura){
+    float proa =(atan2(leitura.y, leitura.x)) * DEG2RAD;
+    return normalizar360(proa);
+};
+
+// utilitarios
+float normalizar360(float angulo){
+    angulo = fmodf(angulo, 360.0);
+    if(angulo < 0){
+        angulo = angulo + 360.0f;
+    }
+    return(angulo);
+};
 
 int main(void)
 {
     Vector2 centerPoint;
     centerPoint = (Vector2){300.0f,310.0f};
     const int raio = 250;
-    const float velocidade = 60.0f;
+    const float velocidade = 60.0f;\
     float proa = 0.0f;
     const int screenWidth = 600;
     const int screenHeight = 600;
+    const float campo = 1.0f;
+    const float ruido = 0.0f;
 
     InitWindow(screenWidth, screenHeight, "Busula");
     SetTargetFPS(60);
 
     while (!WindowShouldClose()){
-        float dt = GetFPS();
+        float dt = GetFrameTime();
         if(IsKeyDown(KEY_D)){
             proa = proa + velocidade * dt;
         }else if (IsKeyDown(KEY_A))
